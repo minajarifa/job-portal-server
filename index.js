@@ -3,10 +3,10 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
+require('dotenv').config();
 
 // middleware
-// ZBQVyOTQIv4r7HkH
-// job-portal
+
 app.use(cors());
 app.use(express.json());
 
