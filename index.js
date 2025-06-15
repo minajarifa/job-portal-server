@@ -27,32 +27,44 @@ async function run() {
   try {
     const coffeeCollection = client.db("coffeeDB").collection("coffee");
 
-
-    app.get(`/coffee/:id`,async(req,res)=>{
-    const id = req.params.id
-    const query ={_id: new ObjectId(id)}; 
-    const result= await coffeeCollection.findOne(query);
-    res.send(result) 
-    })
+    app.get(`/coffee/:id`, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await coffeeCollection.findOne(query);
+      res.send(result);
+    });
     app.post("/coffee", async (req, res) => {
       const newCoffee = req.body;
       const result = await coffeeCollection.insertOne(newCoffee);
       res.send(result);
     });
 
-    
     app.get("/coffee", async (req, res) => {
       const result = await coffeeCollection.find().toArray();
       res.send(result);
     });
-    app.delete("/delete/:id",async(req,res)=>{
+    app.delete("/delete/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) };
       const result = await coffeeCollection.deleteOne(query);
-      console.log(result)
-      return
+      console.log(result);
+      return;
       res.send(result);
-    })
+    });
+    app.put("/coffee/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updateData = req.body;
+      const options = { upsert: true };
+      const coffee={
+        $set:{
+          ...updateData
+        }
+      }
+      const result = await coffeeCollection.updateOne(query,coffee,options);
+      console.log(result)
+      // res.send(result)
+    });
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
