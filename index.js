@@ -55,15 +55,15 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const updateData = req.body;
+      console.log(updateData)
       const options = { upsert: true };
-      const coffee={
-        $set:{
-          ...updateData
-        }
-      }
+      const coffee = {
+        $set: {
+          ...updateData,
+        },
+      };
       const result = await coffeeCollection.updateOne(query,coffee,options);
-      console.log(result)
-      // res.send(result)
+      res.send(result)
     });
 
     console.log(
