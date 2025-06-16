@@ -26,6 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const coffeeCollection = client.db("coffeeDB").collection("coffee");
+    const usersCollection = client.db("coffeeDB").collection("users");
 
     app.get(`/coffee/:id`, async (req, res) => {
       const id = req.params.id;
@@ -65,6 +66,7 @@ async function run() {
       const result = await coffeeCollection.updateOne(query,coffee,options);
       res.send(result)
     });
+    
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
