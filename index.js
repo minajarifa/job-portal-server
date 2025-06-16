@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.json());
 
-// const uri =`mongodb+srv://<db_username>:<db_password>@cluster0.63qrdth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.63qrdth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -28,6 +28,7 @@ async function run() {
     const coffeeCollection = client.db("coffeeDB").collection("coffee");
     const usersCollection = client.db("coffeeDB").collection("users");
 
+    // coffee collection
     app.get(`/coffee/:id`, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -56,17 +57,31 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const updateData = req.body;
-      console.log(updateData)
+      console.log(updateData);
       const options = { upsert: true };
       const coffee = {
         $set: {
           ...updateData,
         },
       };
-      const result = await coffeeCollection.updateOne(query,coffee,options);
-      res.send(result)
+      const result = await coffeeCollection.updateOne(query, coffee, options);
+      res.send(result);
     });
-    
+
+    // users data collection
+    app.post("/user", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+    app.get("/users", async (req, res) => {
+      const result = await usersCollection.find().toArray();
+      res.send(result);
+    });
+    // git add .
+    // git commit -m "  "
+    // git push
+    // clear
 
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
