@@ -68,6 +68,8 @@ async function run() {
     });
 
     // users data collection
+
+
     app.post("/user", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
@@ -77,6 +79,7 @@ async function run() {
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
+
     // git add .
     // git commit -m "  "
     // git push
