@@ -69,7 +69,6 @@ async function run() {
 
     // users data collection
 
-
     app.post("/user", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
@@ -78,6 +77,17 @@ async function run() {
     app.get("/users", async (req, res) => {
       const result = await usersCollection.find().toArray();
       res.send(result);
+    });
+    app.delete('/user/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result= await usersCollection.deleteOne(query);
+      res.send(result)
+    })
+    app.put("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      // TODO 
     });
 
     // git add .
