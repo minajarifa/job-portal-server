@@ -78,16 +78,30 @@ async function run() {
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
-    app.delete('/user/:id',async(req,res)=>{
+    app.get("/user/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result= await usersCollection.deleteOne(query);
-      res.send(result)
-    })
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
     app.put("/user/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      // TODO 
+      const user = req.body;
+      const options = { upsert: true };
+      const newUser = {
+        $set: {
+          ...user,
+        },
+      };
+      const result = await usersCollection.updateOne(query, newUser, options);
+      res.send(result);
     });
 
     // git add .
